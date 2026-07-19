@@ -69,6 +69,19 @@ button:focus-visible{outline:3px solid var(--cream);outline-offset:2px}
 .consent{flex:1 1 100%;display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--cream-dim)}
 .consent input{margin-top:4px;accent-color:var(--coral)}
 .consent a{color:var(--cream-dim)}
+.form-error{flex:1 1 100%;font-size:14px;color:#F0B7A4;margin-top:2px}
+button[disabled]{opacity:.6;cursor:progress}
+.success{
+  margin-top:38px;max-width:520px;
+  background:rgba(250,243,234,.06);border:1px solid rgba(232,115,75,.35);
+  border-radius:var(--radius);padding:26px 26px 28px;
+}
+.success .tick{
+  width:44px;height:44px;border-radius:50%;background:var(--coral);
+  display:flex;align-items:center;justify-content:center;margin-bottom:16px;
+}
+.success h3{font-size:23px;font-weight:500;letter-spacing:-.01em;margin-bottom:8px}
+.success p{color:var(--cream-dim);font-size:16px}
 
 .route{background:var(--teal);padding:72px 0}
 .stops{margin-top:34px;position:relative;padding-left:40px}
@@ -122,14 +135,23 @@ footer a{color:var(--cream-dim)}
     <h1>Vier Stunden. 380 Menschen. <em>Und keiner sagt was.</em></h1>
     <p class="lead">ahola zeigt dir, wer im selben Zug sitzt und gerade Lust auf ein Gespräch, eine Runde Karten oder einen Kaffee im Bordbistro hat. Danach verschwindet alles wieder.</p>
 
-    <form action="https://formspree.io/f/mzdngpnr" method="POST">
+    <form id="waitlist" action="https://formspree.io/f/mzdngpnr" method="POST">
       <input type="email" name="email" placeholder="deine@mail.de" required aria-label="E-Mail-Adresse">
       <button type="submit">Vormerken</button>
       <label class="consent">
         <input type="checkbox" name="consent" required>
         <span>Ich möchte informiert werden, wenn ahola startet. Abmeldung jederzeit möglich. <a href="/datenschutz.html">Datenschutz</a></span>
       </label>
+      <p class="form-error" id="formError" hidden></p>
     </form>
+
+    <div class="success" id="success" hidden>
+      <div class="tick" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FAF3EA" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+      <h3>Erfolgreich vorgemerkt!</h3>
+      <p>Danke — du stehst auf der Warteliste. Wir melden uns, sobald ahola startet.</p>
+    </div>
   </section>
 </div>
 
@@ -191,6 +213,47 @@ footer a{color:var(--cream-dim)}
     </span>
   </div>
 </footer>
+
+<script>
+  (function () {
+    var form = document.getElementById('waitlist');
+    var success = document.getElementById('success');
+    var errorBox = document.getElementById('formError');
+    if (!form) return;
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      errorBox.hidden = true;
+      var btn = form.querySelector('button[type=submit]');
+      btn.disabled = true;
+      var original = btn.textContent;
+      btn.textContent = 'Senden …';
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' }
+      }).then(function (res) {
+        if (res.ok) {
+          form.hidden = true;
+          success.hidden = false;
+          success.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } else {
+          return res.json().then(function (data) {
+            var msg = (data && data.errors && data.errors.length)
+              ? data.errors.map(function (x) { return x.message; }).join(', ')
+              : 'Etwas ist schiefgelaufen. Bitte versuch es später erneut.';
+            throw new Error(msg);
+          });
+        }
+      }).catch(function (err) {
+        errorBox.textContent = err.message || 'Netzwerkfehler. Bitte versuch es später erneut.';
+        errorBox.hidden = false;
+      }).finally(function () {
+        btn.disabled = false;
+        btn.textContent = original;
+      });
+    });
+  })();
+</script>
 
 </body>
 </html>
