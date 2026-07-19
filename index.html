@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ahola — Leute treffen, die gerade denselben Weg haben</title>
+<meta name="description" content="ahola verbindet dich mit Reisenden im selben Zug. Reden, spielen, Kaffee im Bordbistro. Jetzt vormerken.">
+<meta property="og:title" content="ahola — The happiest way to meet people">
+<meta property="og:description" content="Leute treffen, die gerade im selben Zug sitzen.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="ahola-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --teal:#0F6E56; --teal-deep:#08382C; --teal-mid:#125F4B;
+  --coral:#D85A30; --coral-hi:#E8734B;
+  --cream:#FAF3EA; --cream-dim:#C7D8D0;
+  --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--teal-deep); color:var(--cream);
+  font-family:'Outfit',system-ui,sans-serif; font-weight:300;
+  line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:940px;margin:0 auto;padding:0 24px}
+.mono{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--cream-dim)}
+
+header{padding:28px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.brand span{font-size:26px;font-weight:500;letter-spacing:-.01em}
+
+.hero{padding:56px 0 84px}
+.hero h1{
+  font-size:clamp(38px,7vw,68px); font-weight:500; line-height:1.05;
+  letter-spacing:-.03em; max-width:16ch;
+}
+.hero h1 em{font-style:normal;color:var(--coral-hi)}
+.hero .lead{margin-top:22px;font-size:clamp(17px,2.2vw,21px);max-width:46ch;color:var(--cream-dim)}
+
+form{margin-top:38px;display:flex;flex-wrap:wrap;gap:10px;max-width:520px}
+input[type=email]{
+  flex:1 1 260px;min-width:0;height:54px;padding:0 18px;
+  background:rgba(250,243,234,.07);border:1px solid rgba(250,243,234,.22);
+  border-radius:var(--radius);color:var(--cream);font:400 16px 'Outfit',sans-serif;
+}
+input[type=email]::placeholder{color:rgba(250,243,234,.45)}
+input[type=email]:focus{outline:none;border-color:var(--coral-hi);box-shadow:0 0 0 3px rgba(232,115,75,.25)}
+button{
+  height:54px;padding:0 28px;border:none;border-radius:var(--radius);
+  background:var(--coral);color:var(--cream);
+  font:500 16px 'Outfit',sans-serif;cursor:pointer;transition:background .15s ease;
+}
+button:hover{background:var(--coral-hi)}
+button:focus-visible{outline:3px solid var(--cream);outline-offset:2px}
+.consent{flex:1 1 100%;display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--cream-dim)}
+.consent input{margin-top:4px;accent-color:var(--coral)}
+.consent a{color:var(--cream-dim)}
+
+.route{background:var(--teal);padding:72px 0}
+.stops{margin-top:34px;position:relative;padding-left:40px}
+.stops::before{content:"";position:absolute;left:11px;top:10px;bottom:10px;width:2px;background:rgba(250,243,234,.25)}
+.stop{position:relative;padding:0 0 40px}
+.stop:last-child{padding-bottom:0}
+.stop::before{
+  content:"";position:absolute;left:-35px;top:6px;width:16px;height:16px;
+  border-radius:50%;background:var(--teal);border:3px solid var(--cream);
+}
+.stop:last-child::before{background:var(--coral);border-color:var(--coral)}
+.stop h3{font-size:21px;font-weight:500;margin:6px 0 4px}
+.stop p{color:var(--cream-dim);max-width:52ch}
+
+.safety{padding:72px 0}
+.safety h2, .route h2{font-size:clamp(26px,4vw,34px);font-weight:500;letter-spacing:-.02em;margin-top:10px}
+.grid{margin-top:34px;display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.card{background:rgba(250,243,234,.06);border:1px solid rgba(250,243,234,.12);border-radius:var(--radius);padding:22px}
+.card h3{font-size:17px;font-weight:500;margin-bottom:6px}
+.card p{font-size:15px;color:var(--cream-dim)}
+
+footer{border-top:1px solid rgba(250,243,234,.14);padding:30px 0 44px;font-size:13px;color:var(--cream-dim)}
+footer a{color:var(--cream-dim)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <svg width="34" height="42" viewBox="38 18 72 90" aria-hidden="true">
+        <ellipse cx="50" cy="30" rx="11" ry="10" fill="#FAF3EA" transform="rotate(-18 50 30)"/>
+        <ellipse cx="84" cy="30" rx="11" ry="10" fill="#FAF3EA" transform="rotate(18 84 30)"/>
+        <circle cx="70" cy="70" r="30" fill="none" stroke="#FAF3EA" stroke-width="14"/>
+        <rect x="94" y="34" width="14" height="72" rx="7" fill="#FAF3EA"/>
+      </svg>
+      <span>ahola</span>
+    </div>
+  </header>
+
+  <section class="hero">
+    <p class="mono">ICE 1008 · München → Münster · 4 Std 12 Min</p>
+    <h1>Vier Stunden. 380 Menschen. <em>Und keiner sagt was.</em></h1>
+    <p class="lead">ahola zeigt dir, wer im selben Zug sitzt und gerade Lust auf ein Gespräch, eine Runde Karten oder einen Kaffee im Bordbistro hat. Danach verschwindet alles wieder.</p>
+
+    <form action="https://formspree.io/f/DEINE_FORM_ID" method="POST">
+      <input type="email" name="email" placeholder="deine@mail.de" required aria-label="E-Mail-Adresse">
+      <button type="submit">Vormerken</button>
+      <label class="consent">
+        <input type="checkbox" name="consent" required>
+        <span>Ich möchte informiert werden, wenn ahola startet. Abmeldung jederzeit möglich. <a href="/datenschutz">Datenschutz</a></span>
+      </label>
+    </form>
+  </section>
+</div>
+
+<section class="route">
+  <div class="wrap">
+    <p class="mono">So läuft die Fahrt</p>
+    <h2>Drei Halte, dann redet ihr</h2>
+    <div class="stops">
+      <div class="stop">
+        <p class="mono">Halt 1</p>
+        <h3>Einchecken</h3>
+        <p>Zugnummer eingeben, fertig. Dein Ticket bestätigt, dass du wirklich mitfährst — keine Fremden von außen.</p>
+      </div>
+      <div class="stop">
+        <p class="mono">Halt 2</p>
+        <h3>Sagen, worauf du Lust hast</h3>
+        <p>Über KI reden, Reisetipps tauschen, Uno spielen, einfach nur nicht allein Kaffee trinken. Du wählst, andere sehen es.</p>
+      </div>
+      <div class="stop">
+        <p class="mono">Halt 3</p>
+        <h3>Ahola sagen</h3>
+        <p>Kurz schreiben, im Bordbistro treffen oder eine Runde spielen. Bei Ankunft endet der Chat — außer ihr wollt beide, dass er bleibt.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="safety">
+  <div class="wrap">
+    <p class="mono">Sicherheit</p>
+    <h2>Nur weil man sich begegnet, muss man sich nicht ausliefern</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Kein Sitzplatz sichtbar</h3>
+        <p>Andere sehen, dass du im Zug bist — nie, wo genau du sitzt.</p>
+      </div>
+      <div class="card">
+        <h3>Nur echte Fahrgäste</h3>
+        <p>Ohne gültiges Ticket kein Zugang. Das schließt aus, wer nur stöbern will.</p>
+      </div>
+      <div class="card">
+        <h3>Alles läuft ab</h3>
+        <p>Profil und Chat enden mit der Fahrt. Kein Verlauf, dem du hinterherlöschst.</p>
+      </div>
+      <div class="card">
+        <h3>Blocken ohne Erklärung</h3>
+        <p>Ein Tipp, und die Person sieht dich nicht mehr. Melden geht aus jedem Chat.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    ahola — The happiest way to meet people. ·
+    <a href="/impressum">Impressum</a> ·
+    <a href="/datenschutz">Datenschutz</a>
+  </div>
+</footer>
+
+</body>
+</html>
