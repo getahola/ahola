@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.className+=' js';</script>
 <title>ahola — Leute treffen, die gerade denselben Weg haben</title>
 <meta name="description" content="ahola verbindet dich mit Reisenden im selben Zug. Reden, spielen, Kaffee im Bordbistro. Jetzt vormerken.">
 <meta property="og:title" content="ahola — The happiest way to meet people">
@@ -20,7 +21,8 @@
 <link rel="icon" type="image/png" href="ahola-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
 <style>
 :root{
   --teal:#0F6E56; --teal-deep:#08382C; --teal-mid:#125F4B;
@@ -38,12 +40,21 @@ body{
 .wrap{max-width:940px;margin:0 auto;padding:0 24px}
 .mono{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--cream-dim)}
 
-header{padding:28px 0}
+header{padding:20px 0 10px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .brand{display:flex;align-items:center;gap:13px}
 .brand svg{display:block;flex:none}
 .brand span{font-size:26px;font-weight:500;letter-spacing:-.01em}
+.lang{display:flex;gap:4px;flex:none}
+.lang button{
+  height:auto;padding:6px 11px;border-radius:999px;
+  background:transparent;border:1px solid rgba(250,243,234,.22);
+  color:var(--cream-dim);font:500 13px 'JetBrains Mono',monospace;letter-spacing:.06em;
+  cursor:pointer;transition:all .15s ease;
+}
+.lang button:hover{border-color:rgba(250,243,234,.45);color:var(--cream)}
+.lang button[aria-pressed="true"]{background:var(--coral);border-color:var(--coral);color:var(--cream)}
 
-.hero{padding:56px 0 84px}
+.hero{padding:24px 0 110px}
 .hero h1{
   font-size:clamp(38px,7vw,68px); font-weight:500; line-height:1.05;
   letter-spacing:-.03em; max-width:16ch;
@@ -66,7 +77,47 @@ button{
 }
 button:hover{background:var(--coral-hi)}
 button:focus-visible{outline:3px solid var(--cream);outline-offset:2px}
+.q{flex:1 1 100%;border:none;padding:0;margin:0}
+.q legend{padding:0;font-size:16px;font-weight:400;color:var(--cream);margin-bottom:11px}
+.q .opts{display:flex;flex-wrap:wrap;gap:8px}
+.q .opts label{cursor:pointer;line-height:1}
+.q .opts input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.q .opts span{
+  display:inline-block;padding:10px 16px;border-radius:999px;
+  border:1px solid rgba(250,243,234,.22);background:rgba(250,243,234,.05);
+  font-size:14px;color:var(--cream-dim);transition:all .15s ease;
+}
+.q .opts label:hover span{border-color:rgba(250,243,234,.45);color:var(--cream)}
+.q .opts input:checked+span{background:var(--coral);border-color:var(--coral);color:var(--cream)}
+.q .opts input:focus-visible+span{outline:2px solid var(--cream);outline-offset:2px}
+.survey{margin-top:34px;max-width:520px}
+.survey-intro{font-size:14px;color:var(--cream-dim);margin-bottom:18px}
+.survey .q{margin-bottom:20px}
+.survey .q:last-of-type{margin-bottom:0}
+.survey .q .opts input:disabled+span{cursor:default}
+.survey .q .opts input:disabled:not(:checked)+span{opacity:.45}
+.survey.done .q .opts label{cursor:default}
+.survey-done{display:flex;align-items:center;gap:9px;margin-top:18px;font-size:15px;color:var(--cream)}
+.survey-done[hidden]{display:none}
+.survey-privacy{margin-top:12px;font-size:13px;color:var(--cream-dim)}
+.survey-privacy a{color:var(--cream-dim)}
+.survey-done svg{flex:none}
+.waitlist-box{margin-top:30px;max-width:520px;border-top:1px solid rgba(250,243,234,.14);padding-top:26px}
+/* Mit JS: Warteliste erst nach beiden Antworten (Klasse .reveal) zeigen; ohne JS bleibt sie sichtbar */
+.js .waitlist-box:not(.reveal){display:none}
+.waitlist-box.reveal{
+  animation:wlReveal .45s ease both;
+}
+@keyframes wlReveal{
+  from{opacity:0;transform:translateY(-8px)}
+  to{opacity:1;transform:none}
+}
+.wl-intro{font-size:16px;color:var(--cream);margin-bottom:14px}
+.wl-intro span{color:var(--cream-dim);font-size:14px}
+.email-label{flex:1 1 100%;font-size:14px;color:var(--cream-dim);margin-top:4px}
+.email-row{flex:1 1 100%;display:flex;flex-wrap:wrap;gap:10px}
 .consent{flex:1 1 100%;display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--cream-dim)}
+.consent[hidden]{display:none}
 .consent input{margin-top:4px;accent-color:var(--coral)}
 .consent a{color:var(--cream-dim)}
 .form-error{flex:1 1 100%;font-size:14px;color:#F0B7A4;margin-top:2px}
@@ -110,6 +161,11 @@ footer a{color:var(--cream-dim)}
 @media (max-width:540px){
   .mono{letter-spacing:.08em}
   .hero>.mono{font-size:11px;white-space:nowrap}
+  header{padding:14px 0 8px}
+  .hero{padding:12px 0 76px}
+  .hero .lead{margin-top:14px}
+  .survey{margin-top:22px}
+  .email-row input[type=email],.email-row button{flex:1 1 100%}
   footer .foot{flex-direction:column;align-items:flex-start;gap:10px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
@@ -128,52 +184,90 @@ footer a{color:var(--cream-dim)}
       </svg>
       <span>ahola</span>
     </div>
+    <div class="lang" role="group" aria-label="Sprache / Language">
+      <button type="button" data-lang="de" aria-pressed="true">DE</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
   </header>
 
   <section class="hero">
-    <p class="mono">ICE 610 · München → Münster · 6 Std 26 Min</p>
-    <h1>Sechs Stunden. 380 Menschen. <em>Und keiner sagt was.</em></h1>
-    <p class="lead">ahola zeigt dir, wer im selben Zug sitzt und gerade Lust auf ein Gespräch, eine Runde Karten oder einen Kaffee im Bordbistro hat. Danach verschwindet alles wieder.</p>
+    <p class="mono" data-i18n="eyebrow">ICE 610 · München → Münster · 6 Std 26 Min</p>
+    <h1 data-i18n-html="headline">Sechs Stunden. 380 Menschen. <em>Und keiner sagt was.</em></h1>
+    <p class="lead" data-i18n="lead">ahola zeigt dir, wer im selben Zug gerade Lust auf ein Gespräch hat. Danach verschwindet alles wieder.</p>
 
-    <form id="waitlist" action="https://formspree.io/f/mzdngpnr" method="POST">
-      <input type="email" name="email" placeholder="deine@mail.de" required aria-label="E-Mail-Adresse">
-      <button type="submit">Vormerken</button>
-      <label class="consent">
-        <input type="checkbox" name="consent" required>
-        <span>Ich möchte informiert werden, wenn ahola startet. Abmeldung jederzeit möglich. <a href="/datenschutz.html">Datenschutz</a></span>
-      </label>
-      <p class="form-error" id="formError" hidden></p>
-    </form>
+    <div class="survey" id="surveyBlock">
+      <p class="survey-intro" data-i18n="surveyIntro">Zwei kurze Fragen — hilft uns, ahola richtig zu bauen.</p>
 
-    <div class="success" id="success" hidden>
-      <div class="tick" aria-hidden="true">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FAF3EA" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      <fieldset class="q">
+        <legend data-i18n="q1">Wie oft bist du im Zug unterwegs?</legend>
+        <div class="opts">
+          <label><input type="radio" name="haeufigkeit" value="täglich"><span data-i18n="q1a">täglich</span></label>
+          <label><input type="radio" name="haeufigkeit" value="mehrmals im Monat"><span data-i18n="q1b">mehrmals im Monat</span></label>
+          <label><input type="radio" name="haeufigkeit" value="selten"><span data-i18n="q1c">selten</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="q">
+        <legend data-i18n="q2">Würdest du im Zug mit Fremden reden?</legend>
+        <div class="opts">
+          <label><input type="radio" name="offenheit" value="klar, gerne"><span data-i18n="q2a">klar, gerne</span></label>
+          <label><input type="radio" name="offenheit" value="kommt drauf an"><span data-i18n="q2b">kommt drauf an</span></label>
+          <label><input type="radio" name="offenheit" value="eher nicht"><span data-i18n="q2c">eher nicht</span></label>
+        </div>
+      </fieldset>
+
+      <p class="survey-done" id="surveyDone" hidden>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--coral-hi)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+        <span data-i18n="surveyDone">Danke! Deine Antwort ist gespeichert.</span>
+      </p>
+
+      <p class="survey-privacy" data-i18n="surveyPrivacy">Anonym, kein Zwang.</p>
+    </div>
+
+    <div class="waitlist-box" id="waitlistBox">
+      <p class="wl-intro" data-i18n-html="wlIntro">Willst du dabei sein, wenn ahola startet? <span>Freiwillig.</span></p>
+      <form id="wlForm" action="https://formspree.io/f/mzdngpnr" method="POST">
+        <div class="email-row">
+          <input type="email" name="email" placeholder="deine@mail.de" data-i18n-ph="emailPh" aria-label="E-Mail-Adresse" data-i18n-aria="emailAria">
+          <button type="submit" data-i18n="submit">Ich bin dabei</button>
+        </div>
+        <label class="consent" id="consentRow">
+          <input type="checkbox" name="consent">
+          <span data-i18n-html="consent">Ich möchte informiert werden, wenn ahola startet. Abmeldung jederzeit möglich. <a href="/datenschutz.html">Datenschutz</a></span>
+        </label>
+        <p class="form-error" id="formError" hidden></p>
+      </form>
+
+      <div class="success" id="wlSuccess" hidden>
+        <div class="tick" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FAF3EA" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        </div>
+        <h3 data-i18n="successTitle">Erfolgreich vorgemerkt!</h3>
+        <p data-i18n="successText">Danke — du stehst auf der Warteliste. Wir melden uns, sobald ahola startet.</p>
       </div>
-      <h3>Erfolgreich vorgemerkt!</h3>
-      <p>Danke — du stehst auf der Warteliste. Wir melden uns, sobald ahola startet.</p>
     </div>
   </section>
 </div>
 
 <section class="route">
   <div class="wrap">
-    <p class="mono">So läuft die Fahrt</p>
-    <h2>Drei Halte, dann redet ihr</h2>
+    <p class="mono" data-i18n="routeEyebrow">So läuft die Fahrt</p>
+    <h2 data-i18n="routeH2">Drei Halte, dann redet ihr</h2>
     <div class="stops">
       <div class="stop">
-        <p class="mono">Halt 1</p>
-        <h3>Einchecken</h3>
-        <p>Zugnummer eingeben, fertig. Dein Ticket bestätigt, dass du wirklich mitfährst — keine Fremden von außen.</p>
+        <p class="mono" data-i18n="stop1">Halt 1</p>
+        <h3 data-i18n="stop1H">Einchecken</h3>
+        <p data-i18n="stop1P">Zugnummer eingeben, fertig. Dein Ticket bestätigt, dass du wirklich mitfährst — keine Fremden von außen.</p>
       </div>
       <div class="stop">
-        <p class="mono">Halt 2</p>
-        <h3>Sagen, worauf du Lust hast</h3>
-        <p>Über KI reden, Reisetipps tauschen, Uno spielen, einfach nur nicht allein Kaffee trinken. Du wählst, andere sehen es.</p>
+        <p class="mono" data-i18n="stop2">Halt 2</p>
+        <h3 data-i18n="stop2H">Sagen, worauf du Lust hast</h3>
+        <p data-i18n="stop2P">Über KI reden, Reisetipps tauschen, Uno spielen, einfach nur nicht allein Kaffee trinken. Du wählst, andere sehen es.</p>
       </div>
       <div class="stop">
-        <p class="mono">Halt 3</p>
-        <h3>Ahola sagen</h3>
-        <p>Kurz schreiben, im Bordbistro treffen oder eine Runde spielen. Bei Ankunft endet der Chat — außer ihr wollt beide, dass er bleibt.</p>
+        <p class="mono" data-i18n="stop3">Halt 3</p>
+        <h3 data-i18n="stop3H">Ahola sagen</h3>
+        <p data-i18n="stop3P">Kurz schreiben, im Bordbistro treffen oder eine Runde spielen. Bei Ankunft endet der Chat — außer ihr wollt beide, dass er bleibt.</p>
       </div>
     </div>
   </div>
@@ -181,24 +275,24 @@ footer a{color:var(--cream-dim)}
 
 <section class="safety">
   <div class="wrap">
-    <p class="mono">Sicherheit</p>
-    <h2>Nur weil man sich begegnet, muss man sich nicht ausliefern</h2>
+    <p class="mono" data-i18n="safetyEyebrow">Sicherheit</p>
+    <h2 data-i18n="safetyH2">Nur weil man sich begegnet, muss man sich nicht ausliefern</h2>
     <div class="grid">
       <div class="card">
-        <h3>Kein Sitzplatz sichtbar</h3>
-        <p>Andere sehen, dass du im Zug bist — nie, wo genau du sitzt.</p>
+        <h3 data-i18n="safe1H">Kein Sitzplatz sichtbar</h3>
+        <p data-i18n="safe1P">Andere sehen, dass du im Zug bist — nie, wo genau du sitzt.</p>
       </div>
       <div class="card">
-        <h3>Nur echte Fahrgäste</h3>
-        <p>Ohne gültiges Ticket kein Zugang. Das schließt aus, wer nur stöbern will.</p>
+        <h3 data-i18n="safe2H">Nur echte Fahrgäste</h3>
+        <p data-i18n="safe2P">Ohne gültiges Ticket kein Zugang. Das schließt aus, wer nur stöbern will.</p>
       </div>
       <div class="card">
-        <h3>Alles läuft ab</h3>
-        <p>Profil und Chat enden mit der Fahrt. Kein Verlauf, dem du hinterherlöschst.</p>
+        <h3 data-i18n="safe3H">Alles läuft ab</h3>
+        <p data-i18n="safe3P">Profil und Chat enden mit der Fahrt. Kein Verlauf, dem du hinterherlöschst.</p>
       </div>
       <div class="card">
-        <h3>Blocken ohne Erklärung</h3>
-        <p>Ein Tipp, und die Person sieht dich nicht mehr. Melden geht aus jedem Chat.</p>
+        <h3 data-i18n="safe4H">Blocken ohne Erklärung</h3>
+        <p data-i18n="safe4P">Ein Tipp, und die Person sieht dich nicht mehr. Melden geht aus jedem Chat.</p>
       </div>
     </div>
   </div>
@@ -206,52 +300,233 @@ footer a{color:var(--cream-dim)}
 
 <footer>
   <div class="wrap foot">
-    <span>ahola — The happiest way to meet people.</span>
+    <span data-i18n="footTag">ahola — The happiest way to meet people.</span>
     <span class="foot-links">
-      <a href="/impressum.html">Impressum</a>
-      <a href="/datenschutz.html">Datenschutz</a>
+      <a href="/impressum.html" data-i18n="footImprint">Impressum</a>
+      <a href="/datenschutz.html" data-i18n="footPrivacy">Datenschutz</a>
     </span>
   </div>
 </footer>
 
 <script>
   (function () {
-    var form = document.getElementById('waitlist');
-    var success = document.getElementById('success');
-    var errorBox = document.getElementById('formError');
-    if (!form) return;
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      errorBox.hidden = true;
-      var btn = form.querySelector('button[type=submit]');
-      btn.disabled = true;
-      var original = btn.textContent;
-      btn.textContent = 'Senden …';
-      fetch(form.action, {
-        method: 'POST',
-        body: new FormData(form),
-        headers: { Accept: 'application/json' }
-      }).then(function (res) {
-        if (res.ok) {
-          form.hidden = true;
-          success.hidden = false;
-          success.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        } else {
-          return res.json().then(function (data) {
-            var msg = (data && data.errors && data.errors.length)
-              ? data.errors.map(function (x) { return x.message; }).join(', ')
-              : 'Etwas ist schiefgelaufen. Bitte versuch es später erneut.';
-            throw new Error(msg);
-          });
-        }
-      }).catch(function (err) {
-        errorBox.textContent = err.message || 'Netzwerkfehler. Bitte versuch es später erneut.';
-        errorBox.hidden = false;
-      }).finally(function () {
-        btn.disabled = false;
-        btn.textContent = original;
+    // ---------- Sprache / Language (DE default, EN via Browser-Sprache oder Umschalter) ----------
+    var I18N = {
+      de: {
+        _title: 'ahola — Leute treffen, die gerade denselben Weg haben',
+        eyebrow: 'ICE 610 · München → Münster · 6 Std 26 Min',
+        headline: 'Sechs Stunden. 380 Menschen. <em>Und keiner sagt was.</em>',
+        lead: 'ahola zeigt dir, wer im selben Zug gerade Lust auf ein Gespräch hat. Danach verschwindet alles wieder.',
+        surveyIntro: 'Zwei kurze Fragen — hilft uns, ahola richtig zu bauen.',
+        q1: 'Wie oft bist du im Zug unterwegs?',
+        q1a: 'täglich', q1b: 'mehrmals im Monat', q1c: 'selten',
+        q2: 'Würdest du im Zug mit Fremden reden?',
+        q2a: 'klar, gerne', q2b: 'kommt drauf an', q2c: 'eher nicht',
+        surveyDone: 'Danke! Deine Antwort ist gespeichert.',
+        surveyPrivacy: 'Anonym, kein Zwang.',
+        wlIntro: 'Willst du dabei sein, wenn ahola startet? <span>Freiwillig.</span>',
+        emailPh: 'deine@mail.de',
+        emailAria: 'E-Mail-Adresse',
+        submit: 'Ich bin dabei',
+        consent: 'Ich möchte informiert werden, wenn ahola startet. Abmeldung jederzeit möglich. <a href="/datenschutz.html">Datenschutz</a>',
+        successTitle: 'Erfolgreich vorgemerkt!',
+        successText: 'Danke — du stehst auf der Warteliste. Wir melden uns, sobald ahola startet.',
+        routeEyebrow: 'So läuft die Fahrt',
+        routeH2: 'Drei Halte, dann redet ihr',
+        stop1: 'Halt 1', stop1H: 'Einchecken', stop1P: 'Zugnummer eingeben, fertig. Dein Ticket bestätigt, dass du wirklich mitfährst — keine Fremden von außen.',
+        stop2: 'Halt 2', stop2H: 'Sagen, worauf du Lust hast', stop2P: 'Über KI reden, Reisetipps tauschen, Uno spielen, einfach nur nicht allein Kaffee trinken. Du wählst, andere sehen es.',
+        stop3: 'Halt 3', stop3H: 'Ahola sagen', stop3P: 'Kurz schreiben, im Bordbistro treffen oder eine Runde spielen. Bei Ankunft endet der Chat — außer ihr wollt beide, dass er bleibt.',
+        safetyEyebrow: 'Sicherheit',
+        safetyH2: 'Nur weil man sich begegnet, muss man sich nicht ausliefern',
+        safe1H: 'Kein Sitzplatz sichtbar', safe1P: 'Andere sehen, dass du im Zug bist — nie, wo genau du sitzt.',
+        safe2H: 'Nur echte Fahrgäste', safe2P: 'Ohne gültiges Ticket kein Zugang. Das schließt aus, wer nur stöbern will.',
+        safe3H: 'Alles läuft ab', safe3P: 'Profil und Chat enden mit der Fahrt. Kein Verlauf, dem du hinterherlöschst.',
+        safe4H: 'Blocken ohne Erklärung', safe4P: 'Ein Tipp, und die Person sieht dich nicht mehr. Melden geht aus jedem Chat.',
+        footTag: 'ahola — The happiest way to meet people.',
+        footImprint: 'Impressum', footPrivacy: 'Datenschutz',
+        msgEmail: 'Bitte gib deine E-Mail-Adresse ein.',
+        msgConsent: 'Bitte bestätige die Einwilligung, um dich vorzumerken.',
+        msgGeneric: 'Etwas ist schiefgelaufen. Bitte versuch es später erneut.',
+        msgNetwork: 'Netzwerkfehler. Bitte versuch es später erneut.',
+        sending: 'Senden …'
+      },
+      en: {
+        _title: 'ahola — meet people heading the same way, right now',
+        eyebrow: 'ICE 610 · Munich → Münster · 6 hrs 26 min',
+        headline: 'Six hours. 380 people. <em>And nobody says a word.</em>',
+        lead: 'ahola shows you who\u2019s on the same train and up for a chat right now. Afterwards, it all disappears.',
+        surveyIntro: 'Two quick questions — they help us build ahola right.',
+        q1: 'How often are you on the train?',
+        q1a: 'daily', q1b: 'several times a month', q1c: 'rarely',
+        q2: 'Would you talk to strangers on the train?',
+        q2a: 'sure, happily', q2b: 'depends', q2c: 'rather not',
+        surveyDone: 'Thanks! Your answer has been saved.',
+        surveyPrivacy: 'Anonymous, no pressure.',
+        wlIntro: 'Want to be there when ahola launches? <span>Optional.</span>',
+        emailPh: 'you@mail.com',
+        emailAria: 'Email address',
+        submit: 'I\u2019m in',
+        consent: 'I\u2019d like to be notified when ahola launches. Unsubscribe anytime. <a href="/datenschutz.html">Privacy</a>',
+        successTitle: 'You\u2019re on the list!',
+        successText: 'Thanks — you\u2019re on the waitlist. We\u2019ll be in touch when ahola launches.',
+        routeEyebrow: 'How the ride works',
+        routeH2: 'Three stops, then you\u2019re talking',
+        stop1: 'Stop 1', stop1H: 'Check in', stop1P: 'Enter your train number, done. Your ticket confirms you\u2019re really on board — no strangers from outside.',
+        stop2: 'Stop 2', stop2H: 'Say what you\u2019re up for', stop2P: 'Talk about AI, swap travel tips, play a round of cards, or just not drink your coffee alone. You choose, others see it.',
+        stop3: 'Stop 3', stop3H: 'Say ahola', stop3P: 'Send a quick message, meet in the bistro car or play a round. The chat ends on arrival — unless you both want it to stay.',
+        safetyEyebrow: 'Safety',
+        safetyH2: 'Meeting someone doesn\u2019t mean exposing yourself',
+        safe1H: 'No seat visible', safe1P: 'Others see that you\u2019re on the train — never exactly where you\u2019re sitting.',
+        safe2H: 'Real passengers only', safe2P: 'No valid ticket, no access. That keeps out anyone just browsing.',
+        safe3H: 'Everything expires', safe3P: 'Profile and chat end with the ride. No history to delete later.',
+        safe4H: 'Block without explaining', safe4P: 'One tap and that person can\u2019t see you anymore. Reporting works from every chat.',
+        footTag: 'ahola — The happiest way to meet people.',
+        footImprint: 'Imprint', footPrivacy: 'Privacy',
+        msgEmail: 'Please enter your email address.',
+        msgConsent: 'Please confirm the consent to join the list.',
+        msgGeneric: 'Something went wrong. Please try again later.',
+        msgNetwork: 'Network error. Please try again later.',
+        sending: 'Sending …'
+      }
+    };
+
+    var lang = 'de';
+    function t(key) { return (I18N[lang] && I18N[lang][key] != null) ? I18N[lang][key] : (I18N.de[key] || ''); }
+
+    function applyLang(l) {
+      lang = (l === 'en') ? 'en' : 'de';
+      var dict = I18N[lang];
+      document.documentElement.lang = lang;
+      if (dict._title) document.title = dict._title;
+      document.querySelectorAll('[data-i18n]').forEach(function (el) {
+        var k = el.getAttribute('data-i18n'); if (dict[k] != null) el.textContent = dict[k];
       });
+      document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
+        var k = el.getAttribute('data-i18n-html'); if (dict[k] != null) el.innerHTML = dict[k];
+      });
+      document.querySelectorAll('[data-i18n-ph]').forEach(function (el) {
+        var k = el.getAttribute('data-i18n-ph'); if (dict[k] != null) el.placeholder = dict[k];
+      });
+      document.querySelectorAll('[data-i18n-aria]').forEach(function (el) {
+        var k = el.getAttribute('data-i18n-aria'); if (dict[k] != null) el.setAttribute('aria-label', dict[k]);
+      });
+      document.querySelectorAll('.lang button').forEach(function (b) {
+        b.setAttribute('aria-pressed', String(b.getAttribute('data-lang') === lang));
+      });
+      try { localStorage.setItem('ahola.lang', lang); } catch (e) {}
+    }
+
+    (function initLang() {
+      var stored = null;
+      try { stored = localStorage.getItem('ahola.lang'); } catch (e) {}
+      var nav = (navigator.language || navigator.userLanguage || 'de').toLowerCase();
+      applyLang(stored || (nav.indexOf('en') === 0 ? 'en' : 'de'));
+    })();
+
+    document.querySelectorAll('.lang button').forEach(function (b) {
+      b.addEventListener('click', function () { applyLang(b.getAttribute('data-lang')); });
     });
+
+    // Zwei getrennte Formspree-Formulare (je eigenes Kontingent + Postfach):
+    var SURVEY_ACTION   = 'https://formspree.io/f/xgogllol';   // "Umfrage"-Formular (Fragen)
+    var WAITLIST_ACTION = 'https://formspree.io/f/mzdngpnr';     // bestehendes Warteliste-Formular
+
+    function selected(name) {
+      var el = document.querySelector('input[name=' + name + ']:checked');
+      return el ? el.value : '';
+    }
+
+    // ---- Zwei-Fragen-Umfrage: sendet automatisch, sobald beide beantwortet sind ----
+    var survey = document.getElementById('surveyBlock');
+    var surveyDone = document.getElementById('surveyDone');
+    var waitlistBox = document.getElementById('waitlistBox');
+    var surveySent = false;
+    if (survey) {
+      survey.addEventListener('change', function () {
+        if (surveySent) return;
+        var freq = selected('haeufigkeit');
+        var open = selected('offenheit');
+        if (!freq || !open) return;
+        surveySent = true;
+        Array.prototype.forEach.call(
+          survey.querySelectorAll('input[type=radio]'),
+          function (r) { r.disabled = true; }
+        );
+        survey.classList.add('done');
+
+        // Warteliste erst nach beiden Antworten einblenden (kleine Zusage zuerst)
+        if (waitlistBox && !waitlistBox.classList.contains('reveal')) {
+          waitlistBox.classList.add('reveal');
+        }
+
+        var data = new FormData();
+        data.append('typ', 'Umfrage');
+        data.append('sprache', lang);
+        data.append('haeufigkeit', freq);
+        data.append('offenheit', open);
+        fetch(SURVEY_ACTION, { method: 'POST', body: data, headers: { Accept: 'application/json' } })
+          .catch(function () {})            // still im Hintergrund; UI hat bereits gedankt
+          .finally(function () { surveyDone.hidden = false; });
+      });
+    }
+
+    // ---- Optionale Warteliste ----
+    var wlForm = document.getElementById('wlForm');
+    var wlSuccess = document.getElementById('wlSuccess');
+    var errorBox = document.getElementById('formError');
+    var consentRow = document.getElementById('consentRow');
+    if (wlForm) {
+      var emailInput = wlForm.querySelector('input[type=email]');
+      var consent = consentRow.querySelector('input[name=consent]');
+
+      function showError(msg) { errorBox.textContent = msg; errorBox.hidden = false; }
+
+      wlForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        errorBox.hidden = true;
+
+        var email = emailInput.value.trim();
+        if (!email) { showError(t('msgEmail')); return; }
+        if (!consent.checked) { showError(t('msgConsent')); return; }
+
+        var btn = wlForm.querySelector('button[type=submit]');
+        var original = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = t('sending');
+
+        var data = new FormData();
+        data.append('typ', 'Warteliste');
+        data.append('sprache', lang);
+        data.append('email', email);
+        data.append('consent', 'ja');
+        var freq = selected('haeufigkeit'), open = selected('offenheit');
+        if (freq) data.append('haeufigkeit', freq);
+        if (open) data.append('offenheit', open);
+
+        fetch(WAITLIST_ACTION, { method: 'POST', body: data, headers: { Accept: 'application/json' } })
+          .then(function (res) {
+            if (res.ok) {
+              wlForm.hidden = true;
+              wlSuccess.hidden = false;
+              wlSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+              return res.json().then(function (d) {
+                var msg = (d && d.errors && d.errors.length)
+                  ? d.errors.map(function (x) { return x.message; }).join(', ')
+                  : t('msgGeneric');
+                throw new Error(msg);
+              });
+            }
+          })
+          .catch(function (err) {
+            showError(err.message || t('msgNetwork'));
+          })
+          .finally(function () {
+            btn.disabled = false;
+            btn.textContent = original;
+          });
+      });
+    }
   })();
 </script>
 
