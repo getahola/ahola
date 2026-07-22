@@ -457,6 +457,11 @@ footer a{color:var(--cream-dim)}
         // Warteliste erst nach beiden Antworten einblenden (kleine Zusage zuerst)
         if (waitlistBox && !waitlistBox.classList.contains('reveal')) {
           waitlistBox.classList.add('reveal');
+          // Sanft ein Stück nach unten scrollen, damit der Mail-Block sichtbar wird
+          var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          setTimeout(function () {
+            waitlistBox.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' });
+          }, 120);
         }
 
         var data = new FormData();
