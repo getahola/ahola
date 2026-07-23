@@ -98,6 +98,8 @@ button:focus-visible{outline:3px solid var(--cream);outline-offset:2px}
 .survey .q .opts input:disabled+span{cursor:default}
 .survey .q .opts input:disabled:not(:checked)+span{opacity:.45}
 .survey.done .q .opts label{cursor:default}
+.q-cond[hidden]{display:none}
+.q-cond.reveal{animation:wlReveal .35s ease both}
 .survey-done{display:flex;align-items:center;gap:9px;margin-top:18px;font-size:15px;color:var(--cream)}
 .survey-done[hidden]{display:none}
 .survey-privacy{margin-top:12px;font-size:13px;color:var(--cream-dim)}
@@ -218,6 +220,16 @@ footer a{color:var(--cream-dim)}
         </div>
       </fieldset>
 
+      <fieldset class="q q-cond" id="q3" hidden>
+        <legend data-i18n="q3">Woran hängt's?</legend>
+        <div class="opts">
+          <label><input type="radio" name="bedingung" value="gegenseitig"><span data-i18n="q3a">Wenn die andere Person auch will</span></label>
+          <label><input type="radio" name="bedingung" value="thema"><span data-i18n="q3b">Wenn es ein konkretes Thema gibt</span></label>
+          <label><input type="radio" name="bedingung" value="sicherheit"><span data-i18n="q3c">Wenn ich mich sicher fühle</span></label>
+          <label><input type="radio" name="bedingung" value="ausstieg"><span data-i18n="q3d">Wenn ich jederzeit aussteigen kann</span></label>
+        </div>
+      </fieldset>
+
       <p class="survey-done" id="surveyDone" hidden>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--coral-hi)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
         <span data-i18n="surveyDone">Danke! Deine Antwort ist gespeichert.</span>
@@ -324,6 +336,8 @@ footer a{color:var(--cream-dim)}
         q1a: 'täglich', q1b: 'mehrmals im Monat', q1c: 'selten',
         q2: 'Würdest du im Zug mit Fremden reden?',
         q2a: 'klar, gerne', q2b: 'kommt drauf an', q2c: 'eher nicht',
+        q3: "Woran hängt's?",
+        q3a: 'Wenn die andere Person auch will', q3b: 'Wenn es ein konkretes Thema gibt', q3c: 'Wenn ich mich sicher fühle', q3d: 'Wenn ich jederzeit aussteigen kann',
         surveyDone: 'Danke! Deine Antwort ist gespeichert.',
         surveyPrivacy: 'Anonym, kein Zwang.',
         wlIntro: 'Willst du dabei sein, wenn ahola startet? <span>Freiwillig.</span>',
@@ -362,6 +376,8 @@ footer a{color:var(--cream-dim)}
         q1a: 'daily', q1b: 'several times a month', q1c: 'rarely',
         q2: 'Would you talk to strangers on the train?',
         q2a: 'sure, happily', q2b: 'depends', q2c: 'rather not',
+        q3: 'What does it depend on?',
+        q3a: 'If the other person wants to too', q3b: 'If there’s a concrete topic', q3c: 'If I feel safe', q3d: 'If I can leave anytime',
         surveyDone: 'Thanks! Your answer has been saved.',
         surveyPrivacy: 'Anonymous, no pressure.',
         wlIntro: 'Want to be there when ahola launches? <span>Optional.</span>',
@@ -438,17 +454,36 @@ footer a{color:var(--cream-dim)}
       return el ? el.value : '';
     }
 
-    // ---- Zwei-Fragen-Umfrage: sendet automatisch, sobald beide beantwortet sind ----
+    // ---- Umfrage: sendet automatisch, sobald alle nötigen Fragen beantwortet sind ----
     var survey = document.getElementById('surveyBlock');
     var surveyDone = document.getElementById('surveyDone');
     var waitlistBox = document.getElementById('waitlistBox');
+    var q3 = document.getElementById('q3');
     var surveySent = false;
     if (survey) {
       survey.addEventListener('change', function () {
         if (surveySent) return;
         var freq = selected('haeufigkeit');
         var open = selected('offenheit');
-        if (!freq || !open) return;
+
+        // Dritte Frage nur bei "kommt drauf an" einblenden
+        if (q3) {
+          if (open === 'kommt drauf an') {
+            if (q3.hidden) { q3.hidden = false; q3.classList.add('reveal'); }
+          } else if (!q3.hidden) {
+            q3.hidden = true;
+            q3.classList.remove('reveal');
+            Array.prototype.forEach.call(
+              q3.querySelectorAll('input[type=radio]'),
+              function (r) { r.checked = false; }
+            );
+          }
+        }
+
+        var cond = selected('bedingung');
+        var needCond = (open === 'kommt drauf an');
+        if (!freq || !open || (needCond && !cond)) return;
+
         surveySent = true;
         Array.prototype.forEach.call(
           survey.querySelectorAll('input[type=radio]'),
@@ -456,7 +491,7 @@ footer a{color:var(--cream-dim)}
         );
         survey.classList.add('done');
 
-        // Warteliste erst nach beiden Antworten einblenden (kleine Zusage zuerst)
+        // Warteliste erst nach den Antworten einblenden (kleine Zusage zuerst)
         if (waitlistBox && !waitlistBox.classList.contains('reveal')) {
           waitlistBox.classList.add('reveal');
           var hero = document.querySelector('.hero');
@@ -473,6 +508,7 @@ footer a{color:var(--cream-dim)}
         data.append('sprache', lang);
         data.append('haeufigkeit', freq);
         data.append('offenheit', open);
+        if (cond) data.append('bedingung', cond);
         fetch(SURVEY_ACTION, { method: 'POST', body: data, headers: { Accept: 'application/json' } })
           .catch(function () {})            // still im Hintergrund; UI hat bereits gedankt
           .finally(function () { surveyDone.hidden = false; });
