@@ -23,6 +23,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
+<!-- GoatCounter (privacy-freundliche Analyse, keine Cookies) -->
+<script data-goatcounter="https://ahola.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 <style>
 :root{
   --teal:#0F6E56; --teal-deep:#08382C; --teal-mid:#125F4B;
@@ -449,6 +452,15 @@ footer a{color:var(--cream-dim)}
     var SURVEY_ACTION   = 'https://formspree.io/f/xgogllol';   // "Umfrage"-Formular (Fragen)
     var WAITLIST_ACTION = 'https://formspree.io/f/mzdngpnr';     // bestehendes Warteliste-Formular
 
+    // GoatCounter-Event (schlägt fehl leise, falls Skript geblockt/nicht geladen)
+    function track(path, title) {
+      try {
+        if (window.goatcounter && window.goatcounter.count) {
+          window.goatcounter.count({ path: path, title: title || path, event: true });
+        }
+      } catch (e) {}
+    }
+
     function selected(name) {
       var el = document.querySelector('input[name=' + name + ']:checked');
       return el ? el.value : '';
@@ -509,6 +521,7 @@ footer a{color:var(--cream-dim)}
         data.append('haeufigkeit', freq);
         data.append('offenheit', open);
         if (cond) data.append('bedingung', cond);
+        track('survey-completed', 'Umfrage abgeschlossen');
         fetch(SURVEY_ACTION, { method: 'POST', body: data, headers: { Accept: 'application/json' } })
           .catch(function () {})            // still im Hintergrund; UI hat bereits gedankt
           .finally(function () { surveyDone.hidden = false; });
@@ -551,6 +564,7 @@ footer a{color:var(--cream-dim)}
         fetch(WAITLIST_ACTION, { method: 'POST', body: data, headers: { Accept: 'application/json' } })
           .then(function (res) {
             if (res.ok) {
+              track('waitlist-signup', 'Warteliste-Anmeldung');
               wlForm.hidden = true;
               wlSuccess.hidden = false;
               wlSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
