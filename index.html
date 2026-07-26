@@ -57,8 +57,9 @@ header{padding:20px 0 10px;display:flex;align-items:center;justify-content:space
 .lang button:hover{border-color:rgba(250,243,234,.45);color:var(--cream)}
 .lang button[aria-pressed="true"]{background:var(--coral);border-color:var(--coral);color:var(--cream)}
 
-.hero{padding:24px 0 56px;transition:padding-bottom .3s ease}
+.hero{padding:24px 0 40px;transition:padding-bottom .3s ease}
 .hero.wl-open{padding-bottom:96px}
+.questions{padding-top:8px;padding-bottom:20px}
 .hero h1{
   font-size:clamp(38px,7vw,68px); font-weight:500; line-height:1.05;
   letter-spacing:-.03em; max-width:16ch;
@@ -94,7 +95,7 @@ button:focus-visible{outline:3px solid var(--cream);outline-offset:2px}
 .q .opts label:hover span{border-color:rgba(250,243,234,.45);color:var(--cream)}
 .q .opts input:checked+span{background:var(--coral);border-color:var(--coral);color:var(--cream)}
 .q .opts input:focus-visible+span{outline:2px solid var(--cream);outline-offset:2px}
-.survey{margin-top:34px;max-width:520px}
+.survey{margin-top:26px;max-width:520px}
 .survey-intro{font-size:14px;color:var(--cream-dim);margin-bottom:18px}
 .survey .q{margin-bottom:20px}
 .survey .q:last-of-type{margin-bottom:0}
@@ -140,6 +141,67 @@ button[disabled]{opacity:.6;cursor:progress}
 .success h3{font-size:23px;font-weight:500;letter-spacing:-.01em;margin-bottom:8px}
 .success p{color:var(--cream-dim);font-size:16px}
 
+/* ---- Demo (klickbare Vorschau der App) ---- */
+.demo{padding:36px 0 64px}
+.demo .demo-head, .questions .demo-head{max-width:640px}
+.demo h2, .questions h2{font-size:clamp(26px,4vw,34px);font-weight:500;letter-spacing:-.02em;margin-top:10px}
+.demo .demo-lead, .questions .demo-lead{margin-top:12px;color:var(--cream-dim);font-size:clamp(16px,2vw,18px);max-width:52ch}
+.phone{
+  margin:44px auto 0;position:relative;width:360px;max-width:100%;
+  aspect-ratio:9 / 18.5;
+  border-radius:56px;padding:13px;
+  /* Titanium frame: subtle vertical brushed-metal gradient */
+  background:linear-gradient(145deg,#2b2f36 0%,#4a4f57 18%,#1c1f24 42%,#3a3e45 70%,#15171b 100%);
+  box-shadow:
+    0 40px 80px -34px rgba(0,0,0,.75),
+    inset 0 0 0 1px rgba(255,255,255,.14),
+    inset 0 0 0 2px rgba(0,0,0,.4);
+}
+/* Inner black rim between frame and screen */
+.phone::after{
+  content:"";position:absolute;inset:7px;border-radius:44px;
+  background:#000;z-index:1;
+}
+/* Side buttons (titanium) */
+.phone .btn-side{position:absolute;left:-3px;background:linear-gradient(90deg,#4a4f57,#23262b);border-radius:2px 0 0 2px;z-index:0;box-shadow:-1px 0 2px rgba(0,0,0,.4)}
+.phone .btn-side.mute{top:112px;width:3px;height:26px}
+.phone .btn-side.vol-up{top:158px;width:3px;height:52px}
+.phone .btn-side.vol-down{top:224px;width:3px;height:52px}
+.phone .btn-side.power{left:auto;right:-3px;top:180px;width:3px;height:74px;border-radius:0 2px 2px 0;background:linear-gradient(270deg,#4a4f57,#23262b);box-shadow:1px 0 2px rgba(0,0,0,.4)}
+.phone-screen{
+  position:relative;width:100%;height:100%;border-radius:41px;overflow:hidden;
+  background:var(--teal-mid);z-index:2;
+}
+/* Dynamic Island */
+.phone-screen::before{
+  content:"";position:absolute;top:14px;left:50%;transform:translateX(-50%);
+  width:92px;height:27px;background:#000;border-radius:16px;z-index:6;
+  pointer-events:none;
+}
+.phone-screen iframe{
+  position:absolute;inset:0;width:100%;height:100%;border:0;display:block;
+}
+.demo-poster{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:16px;
+  cursor:pointer;border:0;width:100%;height:100%;padding:24px;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(216,90,48,.28), transparent 60%),
+    linear-gradient(180deg, var(--teal-mid), var(--teal-deep));
+  color:var(--cream);text-align:center;transition:transform .2s ease;
+}
+.demo-poster:hover{transform:scale(1.01)}
+.demo-poster .play{
+  width:66px;height:66px;border-radius:50%;background:var(--coral);
+  display:flex;align-items:center;justify-content:center;flex:none;
+  box-shadow:0 10px 30px -8px rgba(216,90,48,.7);
+}
+.demo-poster .play svg{margin-left:4px}
+.demo-poster .poster-title{font-size:19px;font-weight:500}
+.demo-poster .poster-sub{font-size:14px;color:var(--cream-dim);font-family:'JetBrains Mono',monospace;letter-spacing:.04em}
+.demo-note{margin:16px auto 0;text-align:center;font-size:13px;color:var(--cream-dim)}
+.demo-note a{color:var(--cream-dim)}
+
 .route{background:var(--teal);padding:72px 0}
 .stops{margin-top:34px;position:relative;padding-left:40px}
 .stops::before{content:"";position:absolute;left:11px;top:10px;bottom:10px;width:2px;background:rgba(250,243,234,.25)}
@@ -174,6 +236,20 @@ footer a{color:var(--cream-dim)}
   .survey{margin-top:22px}
   .email-row input[type=email],.email-row button{flex:1 1 100%}
   footer .foot{flex-direction:column;align-items:flex-start;gap:10px}
+  /* On mobile, drop the phone mockup — a fake phone inside a real phone is confusing.
+     Show the demo as a plain full-width rounded card instead. */
+  .demo{padding:48px 0}
+  .phone{
+    width:100%;max-width:none;margin-top:24px;
+    background:none;border-radius:18px;padding:0;
+    aspect-ratio:auto;height:min(78vh,680px);
+    box-shadow:0 20px 50px -24px rgba(0,0,0,.6);
+  }
+  .phone::after{display:none}
+  .phone .btn-side{display:none}
+  .phone-screen{border-radius:18px;border:1px solid rgba(250,243,234,.14)}
+  .phone-screen::before{display:none}
+  .demo-poster{border-radius:18px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
 </style>
@@ -201,10 +277,18 @@ footer a{color:var(--cream-dim)}
     <p class="mono" data-i18n="eyebrow">ICE 610 · München → Münster · 6 Std 26 Min</p>
     <h1 data-i18n-html="headline">Sechs Stunden. 380 Menschen. <em>Und keiner sagt was.</em></h1>
     <p class="lead" data-i18n="lead">ahola zeigt dir, wer im selben Zug gerade Lust auf ein Gespräch hat. Danach verschwindet alles wieder.</p>
+  </section>
+</div>
+
+<div class="wrap">
+  <section class="hero questions">
+    <div class="demo-head">
+      <p class="mono" data-i18n="surveyEyebrow">Umfrage</p>
+      <h2 data-i18n="surveyIntro">Ein paar kurze Fragen</h2>
+      <p class="demo-lead" data-i18n="surveyLead">Hilft uns, ahola richtig zu bauen — anonym und in einer Minute.</p>
+    </div>
 
     <div class="survey" id="surveyBlock">
-      <p class="survey-intro" data-i18n="surveyIntro">Ein paar kurze Fragen — hilft uns, ahola richtig zu bauen.</p>
-
       <fieldset class="q">
         <legend data-i18n="q1">Wie oft bist du im Zug unterwegs?</legend>
         <div class="opts">
@@ -237,8 +321,6 @@ footer a{color:var(--cream-dim)}
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--coral-hi)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
         <span data-i18n="surveyDone">Danke! Deine Antwort ist gespeichert.</span>
       </p>
-
-      <p class="survey-privacy" data-i18n="surveyPrivacy">Anonym, kein Zwang.</p>
     </div>
 
     <div class="waitlist-box" id="waitlistBox">
@@ -265,6 +347,25 @@ footer a{color:var(--cream-dim)}
     </div>
   </section>
 </div>
+
+<section class="demo">
+  <div class="wrap">
+    <div class="demo-head">
+      <p class="mono" data-i18n="demoEyebrow">Vorschau</p>
+      <h2 data-i18n="demoH2">Schau dich schon mal um</h2>
+      <p class="demo-lead" data-i18n="demoLead">Ein kleiner Vorgeschmack auf ahola — tipp rein und klick dich durch die App.</p>
+    </div>
+
+    <div class="phone">
+      <span class="btn-side mute" aria-hidden="true"></span>
+      <span class="btn-side vol-up" aria-hidden="true"></span>
+      <span class="btn-side vol-down" aria-hidden="true"></span>
+      <span class="btn-side power" aria-hidden="true"></span>
+      <div class="phone-screen" id="phoneScreen"></div>
+    </div>
+    <p class="demo-note" data-i18n="demoNote">Frühe Vorschau — noch in Arbeit.</p>
+  </div>
+</section>
 
 <section class="route">
   <div class="wrap">
@@ -334,7 +435,9 @@ footer a{color:var(--cream-dim)}
         eyebrow: 'ICE 610 · München → Münster · 6 Std 26 Min',
         headline: 'Sechs Stunden. 380 Menschen. <em>Und keiner sagt was.</em>',
         lead: 'ahola zeigt dir, wer im selben Zug gerade Lust auf ein Gespräch hat. Danach verschwindet alles wieder.',
-        surveyIntro: 'Ein paar kurze Fragen — hilft uns, ahola richtig zu bauen.',
+        surveyEyebrow: 'Umfrage',
+        surveyIntro: 'Ein paar kurze Fragen',
+        surveyLead: 'Hilft uns, ahola richtig zu bauen — anonym und in einer Minute.',
         q1: 'Wie oft bist du im Zug unterwegs?',
         q1a: 'täglich', q1b: 'mehrmals im Monat', q1c: 'selten',
         q2: 'Würdest du im Zug mit Fremden reden?',
@@ -350,6 +453,12 @@ footer a{color:var(--cream-dim)}
         consent: 'Ich möchte informiert werden, wenn ahola startet. Abmeldung jederzeit möglich. <a href="/datenschutz.html">Datenschutz</a>',
         successTitle: 'Erfolgreich vorgemerkt!',
         successText: 'Danke — du stehst auf der Warteliste. Wir melden uns, sobald ahola startet.',
+        demoEyebrow: 'Vorschau',
+        demoH2: 'Schau dich schon mal um',
+        demoLead: 'Ein kleiner Vorgeschmack auf ahola — tipp rein und klick dich durch die App.',
+        demoStart: 'Demo starten',
+        demoSub: 'interaktiv',
+        demoNote: 'Frühe Vorschau — noch in Arbeit.',
         routeEyebrow: 'So läuft die Fahrt',
         routeH2: 'Drei Halte, dann redet ihr',
         stop1: 'Halt 1', stop1H: 'Einchecken', stop1P: 'Zugnummer eingeben, fertig. Dein Ticket bestätigt, dass du wirklich mitfährst — keine Fremden von außen.',
@@ -374,7 +483,9 @@ footer a{color:var(--cream-dim)}
         eyebrow: 'ICE 610 · Munich → Münster · 6 hrs 26 min',
         headline: 'Six hours. 380 people. <em>And nobody says a word.</em>',
         lead: 'ahola shows you who\u2019s on the same train and up for a chat right now. Afterwards, it all disappears.',
-        surveyIntro: 'A few quick questions — they help us build ahola right.',
+        surveyEyebrow: 'Survey',
+        surveyIntro: 'A few quick questions',
+        surveyLead: 'They help us build ahola right — anonymous, takes a minute.',
         q1: 'How often are you on the train?',
         q1a: 'daily', q1b: 'several times a month', q1c: 'rarely',
         q2: 'Would you talk to strangers on the train?',
@@ -390,6 +501,12 @@ footer a{color:var(--cream-dim)}
         consent: 'I\u2019d like to be notified when ahola launches. Unsubscribe anytime. <a href="/datenschutz.html">Privacy</a>',
         successTitle: 'You\u2019re on the list!',
         successText: 'Thanks — you\u2019re on the waitlist. We\u2019ll be in touch when ahola launches.',
+        demoEyebrow: 'Preview',
+        demoH2: 'Take a look around',
+        demoLead: 'A little taste of ahola — jump in and click through the app.',
+        demoStart: 'Start demo',
+        demoSub: 'interactive',
+        demoNote: 'Early preview — still a work in progress.',
         routeEyebrow: 'How the ride works',
         routeH2: 'Three stops, then you\u2019re talking',
         stop1: 'Stop 1', stop1H: 'Check in', stop1P: 'Enter your train number, done. Your ticket confirms you\u2019re really on board — no strangers from outside.',
@@ -461,6 +578,18 @@ footer a{color:var(--cream-dim)}
       } catch (e) {}
     }
 
+    // ---- Demo: App-Vorschau direkt einbetten (ohne Play-Button) ----
+    var phoneScreen = document.getElementById('phoneScreen');
+    if (phoneScreen && !phoneScreen.querySelector('iframe')) {
+      var frame = document.createElement('iframe');
+      frame.src = 'https://demo.ahola.app/?demo=1&lang=' + lang;
+      frame.title = 'ahola Demo';
+      frame.loading = 'lazy';
+      frame.setAttribute('allow', 'clipboard-write; fullscreen');
+      phoneScreen.appendChild(frame);
+      track('demo-started', 'Demo gestartet');
+    }
+
     function selected(name) {
       var el = document.querySelector('input[name=' + name + ']:checked');
       return el ? el.value : '';
@@ -506,7 +635,7 @@ footer a{color:var(--cream-dim)}
         // Warteliste erst nach den Antworten einblenden (kleine Zusage zuerst)
         if (waitlistBox && !waitlistBox.classList.contains('reveal')) {
           waitlistBox.classList.add('reveal');
-          var hero = document.querySelector('.hero');
+          var hero = document.querySelector('.questions');
           if (hero) hero.classList.add('wl-open');
           // Sanft ein Stück nach unten scrollen, damit der Mail-Block sichtbar wird
           var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
