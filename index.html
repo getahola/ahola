@@ -569,13 +569,18 @@ footer a{color:var(--cream-dim)}
     var SURVEY_ACTION   = 'https://formspree.io/f/xgogllol';   // "Umfrage"-Formular (Fragen)
     var WAITLIST_ACTION = 'https://formspree.io/f/mzdngpnr';     // bestehendes Warteliste-Formular
 
-    // GoatCounter-Event (schlägt fehl leise, falls Skript geblockt/nicht geladen)
-    function track(path, title) {
+    // GoatCounter-Event. Falls das (async geladene) Skript noch nicht da ist,
+    // wird das Event kurz gepuffert und erneut versucht, statt verloren zu gehen.
+    function track(path, title, attempt) {
       try {
         if (window.goatcounter && window.goatcounter.count) {
           window.goatcounter.count({ path: path, title: title || path, event: true });
+          return;
         }
-      } catch (e) {}
+      } catch (e) { return; }
+      if ((attempt || 0) < 20) {
+        setTimeout(function () { track(path, title, (attempt || 0) + 1); }, 500);
+      }
     }
 
     // ---- Demo: App-Vorschau direkt einbetten (ohne Play-Button) ----
@@ -587,7 +592,26 @@ footer a{color:var(--cream-dim)}
       frame.loading = 'lazy';
       frame.setAttribute('allow', 'clipboard-write; fullscreen');
       phoneScreen.appendChild(frame);
-      track('demo-started', 'Demo gestartet');
+
+      // "demo-started" feuert erst bei echter Interaktion mit der Demo, nicht
+      // schon beim Einbetten. Die Demo läuft in einem Cross-Origin-iframe, dessen
+      // Klicks/Scrolls wir nicht direkt lesen können. Wenn ein Nutzer aber in das
+      // iframe tippt/klickt, verliert das Elternfenster den Fokus und
+      // document.activeElement wird zum iframe — das nutzen wir als Signal.
+      var demoTracked = false;
+      function markDemoUsed() {
+        if (demoTracked) return;
+        demoTracked = true;
+        track('demo-started', 'Demo gestartet');
+        window.removeEventListener('blur', onWindowBlur);
+      }
+      function onWindowBlur() {
+        // Kurz warten, bis der Browser activeElement gesetzt hat.
+        setTimeout(function () {
+          if (document.activeElement === frame) markDemoUsed();
+        }, 0);
+      }
+      window.addEventListener('blur', onWindowBlur);
     }
 
     function selected(name) {
