@@ -201,6 +201,23 @@ button[disabled]{opacity:.6;cursor:progress}
 .demo-poster .poster-sub{font-size:14px;color:var(--cream-dim);font-family:'JetBrains Mono',monospace;letter-spacing:.04em}
 .demo-note{margin:16px auto 0;text-align:center;font-size:13px;color:var(--cream-dim)}
 .demo-note a{color:var(--cream-dim)}
+/* "Tap to try" nudge — sits over the phone, doesn't block taps, fades on use */
+.demo-hint{
+  position:absolute;left:50%;top:120px;z-index:7;pointer-events:none;
+  display:flex;align-items:center;gap:7px;white-space:nowrap;
+  padding:9px 15px;border-radius:999px;
+  background:var(--coral);color:#fff;font-size:13px;font-weight:600;
+  box-shadow:0 12px 26px -8px rgba(216,90,48,.8);
+  transform:translateX(-50%);
+  animation:demoHintBob 1.5s ease-in-out infinite;
+}
+.demo-hint .demo-hint-cursor{font-size:16px;line-height:1}
+.demo-hint.hide{opacity:0;animation:none;transition:opacity .35s ease;}
+@keyframes demoHintBob{
+  0%,100%{transform:translateX(-50%) translateY(0)}
+  50%{transform:translateX(-50%) translateY(-7px)}
+}
+@media (prefers-reduced-motion: reduce){ .demo-hint{animation:none} }
 
 .route{background:var(--teal);padding:72px 0}
 .stops{margin-top:34px;position:relative;padding-left:40px}
@@ -294,6 +311,10 @@ footer a{color:var(--cream-dim)}
       <span class="btn-side vol-down" aria-hidden="true"></span>
       <span class="btn-side power" aria-hidden="true"></span>
       <div class="phone-screen" id="phoneScreen"></div>
+      <div class="demo-hint" id="demoHint" aria-hidden="true">
+        <span class="demo-hint-cursor" aria-hidden="true">👆</span>
+        <span data-i18n="demoHint">Zum Ausprobieren tippen</span>
+      </div>
     </div>
     <p class="demo-note" data-i18n="demoNote">Frühe Vorschau — noch in Arbeit.</p>
   </div>
@@ -458,6 +479,7 @@ footer a{color:var(--cream-dim)}
         demoLead: 'Ein kleiner Vorgeschmack auf ahola — tipp rein und klick dich durch die App.',
         demoStart: 'Demo starten',
         demoSub: 'interaktiv',
+        demoHint: 'Zum Ausprobieren tippen',
         demoNote: 'Frühe Vorschau — noch in Arbeit.',
         routeEyebrow: 'So läuft die Fahrt',
         routeH2: 'Drei Halte, dann redet ihr',
@@ -506,6 +528,7 @@ footer a{color:var(--cream-dim)}
         demoLead: 'A little taste of ahola — jump in and click through the app.',
         demoStart: 'Start demo',
         demoSub: 'interactive',
+        demoHint: 'Tap to try it',
         demoNote: 'Early preview — still a work in progress.',
         routeEyebrow: 'How the ride works',
         routeH2: 'Three stops, then you\u2019re talking',
@@ -603,6 +626,11 @@ footer a{color:var(--cream-dim)}
         if (demoTracked) return;
         demoTracked = true;
         track('demo-started', 'Demo gestartet');
+        var hint = document.getElementById('demoHint');
+        if (hint) {
+          hint.classList.add('hide');
+          setTimeout(function () { if (hint.parentNode) hint.parentNode.removeChild(hint); }, 400);
+        }
         window.removeEventListener('blur', onWindowBlur);
       }
       function onWindowBlur() {
